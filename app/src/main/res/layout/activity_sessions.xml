@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sessions_coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/sessions_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary_light"
+        android:clipToPadding="false"
+        android:paddingBottom="28dp"
+        android:paddingLeft="@dimen/list_side_margin"
+        android:paddingRight="@dimen/list_side_margin"
+        android:paddingTop="?actionBarSize"
+        android:scrollbarStyle="outsideOverlay" />
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/sessions_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="4dp">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/sessions_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/sessions_track_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:focusable="true"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/on"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/sessions_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:focusable="true"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/sessions_floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:focusable="true"
+        android:onClick="addSession"
+        android:src="@drawable/add_button"
+        app:elevation="@dimen/fab_elevation"
+        app:fabSize="normal"
+        android:contentDescription="@string/add_track_day_button_desc"
+        app:pressedTranslationZ="@dimen/fab_press_translation_z" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        app:adSize="BANNER"
+        app:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+
+</android.support.design.widget.CoordinatorLayout>

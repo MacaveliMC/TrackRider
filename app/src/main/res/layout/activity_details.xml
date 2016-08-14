@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/details_coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:fillViewport="false"
+        android:padding="4dp">
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:columnCount="3"
+            app:rowCount="6">
+
+
+            <ImageView
+                android:id="@+id/lapTimes"
+                android:onClick="expandButton"
+                android:focusable="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lap_times_section_title"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical"
+                android:focusable="true"
+                android:contentDescription="@string/lap_times_title_desc"/>
+
+            <Button
+                android:id="@+id/add_lap_time_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_lap_time_button"
+                app:layout_columnSpan="3"
+                app:layout_gravity="center_horizontal"
+                android:onClick="addLapTime"
+                android:focusable="true"
+                android:contentDescription="@string/add_lap_time_button_desc"/>
+
+            <LinearLayout
+                android:id="@+id/lap_times_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                app:layout_columnSpan="3"
+                android:orientation="vertical"/>
+
+
+            <ImageView
+                android:id="@+id/suspension"
+                android:onClick="expandButton"
+                android:focusable="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/suspension_section_title"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical"
+                android:focusable="true"
+                android:contentDescription="@string/suspension_title_desc"/>
+
+            <TextView
+                android:id="@+id/frontCompressionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/front_compression"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical"/>
+
+            <EditText
+                android:id="@+id/frontCompressionValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/front_compression_desc"/>
+
+            <TextView
+                android:id="@+id/frontReboundTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/front_rebound"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/frontReboundValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/front_rebound_desc"/>
+
+            <TextView
+                android:id="@+id/frontPreloadTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/front_preload"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/frontPreloadValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/front_preload_desc"/>
+
+            <TextView
+                android:id="@+id/forkHeightTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/fork_height"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/forkHeightValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/fork_height_desc"/>
+
+            <TextView
+                android:id="@+id/oilHeightTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/oil_height"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/oilHeightValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/oil_height_desc"/>
+
+            <TextView
+                android:id="@+id/frontSpringRateTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/front_spring_rate"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/frontSpringRateValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/front_spring_rate_desc"/>
+
+            <TextView
+                android:id="@+id/rearCompressionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_compression"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearCompressionValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_compression_desc"/>
+
+            <TextView
+                android:id="@+id/rearReboundTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_rebound"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearReboundValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_rebound_desc"/>
+
+            <TextView
+                android:id="@+id/rearPreloadTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_preload"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearPreloadValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_preload_desc"/>
+
+            <TextView
+                android:id="@+id/rearHeightTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_height"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearHeightValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_height_desc"/>
+
+            <TextView
+                android:id="@+id/rearSpringRateTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_spring_rate"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearSpringRateValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_spring_rate_desc"/>
+
+            <ImageView
+                android:id="@+id/tires"
+                android:onClick="expandButton"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tires_section_title"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical"
+                android:focusable="true"
+                android:contentDescription="@string/tires_title_desc"/>
+
+            <TextView
+                android:id="@+id/frontTirePressureOutTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/front_tire_pressure_out"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/frontTirePressureOutValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/front_tire_pressure_out_desc"/>
+
+            <TextView
+                android:id="@+id/frontTirePressureInTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/front_tire_pressure_in"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/frontTirePressureInValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/front_tire_pressure_in_desc"/>
+
+            <TextView
+                android:id="@+id/rearTirePressureOutTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_tire_pressure_out"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearTirePressureOutValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_tire_pressure_out_desc"/>
+
+            <TextView
+                android:id="@+id/rearTirePressureInTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_tire_pressure_in"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearTirePressureInValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_tire_pressure_in_desc"/>
+
+            <ImageView
+                android:id="@+id/gearing"
+                android:onClick="expandButton"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gearing_section_title"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical"
+                android:focusable="true"
+                android:contentDescription="@string/gearing_title_desc"/>
+
+            <TextView
+                android:id="@+id/frontSprocketTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/front_sprocket"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/frontSprocketValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/front_sprocket_desc"/>
+
+            <TextView
+                android:id="@+id/rearSprocketTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
+                android:text="@string/rear_sprocket"
+                app:layout_columnSpan="2"
+                app:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/rearSprocketValue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                app:layout_gravity="left"
+                android:focusable="true"
+                android:contentDescription="@string/rear_sprocket_desc"/>
+
+
+        </android.support.v7.widget.GridLayout>
+
+
+    </ScrollView>
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/sessions_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="4dp">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/sessions_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/header_track_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:textSize="20sp"
+                        android:focusable="true"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/on"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/header_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:textSize="20sp"
+                        android:focusable="true"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/session_number_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:focusable="true"/>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

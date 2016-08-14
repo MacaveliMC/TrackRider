@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Track Rider</string>
+    <string name="track_list_title">Track List</string>
+
+    <string name="content_authority">com.michaelcavalli.trackrider</string>
+
+    <string name="OK_button">"OK"</string>
+    <string name="Cancel_button">"Cancel"</string>
+    <string name="delete_message">"Delete?"</string>
+    <string name="delete_dialog">"Delete Dialog"</string>
+    <string name="add_track_dialog">"Add Track Dialog"</string>
+    <string name="add_track_title">"Enter Track Name:"</string>
+    <string name="add_lap_time_dialog">Add Lap Time Dialog</string>
+    <string name="pick_track">"Choose Track"</string>
+
+    <string name="no_gps_info">No GPS Information Available</string>
+
+    <string name="track_list_buton_desc">"Button to track list"</string>
+    <string name="add_track_day_button_desc">"Button to add track day"</string>
+    <string name="lap_times_title_desc">"Lap Times Section"</string>
+    <string name="add_lap_time_button_desc">"Add Lap Time"</string>
+    <string name="suspension_title_desc">Suspension Section</string>
+    <string name="front_compression_desc">"Front Compression"</string>
+    <string name="front_rebound_desc">"Front Rebound"</string>
+    <string name="front_preload_desc">"Front Preload"</string>
+    <string name="fork_height_desc">"Fork Height"</string>
+    <string name="oil_height_desc">"Oil Height"</string>
+    <string name="front_spring_rate_desc">"Front Spring Rate"</string>
+    <string name="rear_compression_desc">"Rear Compression"</string>
+    <string name="rear_rebound_desc">"Rear Rebound"</string>
+    <string name="rear_preload_desc">"Rear Preload"</string>
+    <string name="rear_height_desc">"Rear Height"</string>
+    <string name="rear_spring_rate_desc">"Rear Spring Rate"</string>
+    <string name="tires_title_desc">"Tires Section"</string>
+    <string name="front_tire_pressure_out_desc">"Front Tire Pressure Out"</string>
+    <string name="front_tire_pressure_in_desc">"Front Tire Pressure In"</string>
+    <string name="rear_tire_pressure_out_desc">"Rear Tire Pressure Out"</string>
+    <string name="rear_tire_pressure_in_desc">"Rear Tire Pressure In"</string>
+    <string name="gearing_title_desc">"Gearing Section"</string>
+    <string name="front_sprocket_desc">"Front Sprocket"</string>
+    <string name="rear_sprocket_desc">"Rear Sprocket"</string>
+
+    <string name="click_to_expand">"Click To Expand"</string>
+    <string name="click_to_collapse">"Click To Collapse"</string>
+    <string name="add_track_session_desc">"Add Track Day"</string>
+    <string name="add_track_desc">"Add Track To List"</string>
+
+    <string name="enter_lap_time_desc">"Enter Lap Time"</string>
+    <string name="enter_track_name_desc">"Enter new track name"</string>
+
+    <string name="check_use_gps_desc">"Check to use current gps information for track location"</string>
+
+    <string name="gps_textview_desc">"GPS Information"</string>
+
+    <string name="add_lap_time_button">"Add Lap Time"</string>
+
+    <string name="lap_times_section_title">"Lap Times"</string>
+    <string name="suspension_section_title">Suspension</string>
+
+    <string name="front_compression">"Front Compression: "</string>
+    <string name="front_rebound">"Front Rebound: "</string>
+    <string name="front_preload">"Front Preload: "</string>
+    <string name="fork_height">"Fork Height: "</string>
+    <string name="oil_height">"Oil Height: "</string>
+    <string name="front_spring_rate">"Front Spring Rate: "</string>
+    <string name="rear_compression">"Rear Compression: "</string>
+    <string name="rear_rebound">"Rear Rebound: "</string>
+    <string name="rear_preload">"Rear Preload: "</string>
+    <string name="rear_height">"Rear Height: "</string>
+    <string name="rear_spring_rate">"Rear Spring Rate: "</string>
+
+    <string name="tires_section_title">"Tires"</string>
+    <string name="front_tire_pressure_out">"Front Tire Pressure Out: "</string>
+    <string name="front_tire_pressure_in">"Front Tire Pressure In: "</string>
+    <string name="rear_tire_pressure_out">"Rear Tire Pressure Out: "</string>
+    <string name="rear_tire_pressure_in">"Rear Tire Pressure In: "</string>
+
+    <string name="gearing_section_title">"Gearing"</string>
+    <string name="front_sprocket">"Front Sprocket: "</string>
+    <string name="rear_sprocket">"Rear Sprocket: "</string>
+
+    <string name="on">"on"</string>
+
+    <string name="track_list_button">"Track List"</string>
+
+    <string name="gps_question">"Use Current Location For GPS?"</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+</resources>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tracklist_coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tracklist_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary_light"
+        android:clipToPadding="false"
+        android:paddingBottom="28dp"
+        android:paddingLeft="@dimen/list_side_margin"
+        android:paddingRight="@dimen/list_side_margin"
+        android:paddingTop="?actionBarSize"
+        android:scrollbarStyle="outsideOverlay" />
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/tracklist_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="4dp">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tracklist_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/track_list_title"
+                    android:textColor="@color/primary_text"
+                    android:textSize="30sp"
+                    android:typeface="normal"
+                    android:gravity="center_vertical|center_horizontal" />
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/main_floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:src="@drawable/add_button"
+        app:elevation="@dimen/fab_elevation"
+        app:fabSize="normal"
+        app:pressedTranslationZ="@dimen/fab_press_translation_z"
+        android:onClick="addTrack"
+        android:focusable="true"
+        android:contentDescription="@string/add_track_desc"/>
+
+
+</android.support.design.widget.CoordinatorLayout>
