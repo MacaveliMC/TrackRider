@@ -46,24 +46,26 @@ import java.util.Date;
 
 
 /**
- * Created by silen_000 on 7/28/2016.
+ * This activity lists the tracks the user has entered
  */
 public class TrackListActivity extends AppCompatActivity implements AddTrackDialog.DataReturnInterface,
         LoaderManager.LoaderCallbacks<Cursor>, DeleteDialog.DeleteCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String LOG_TAG = TrackListActivity.class.getSimpleName();
-    private TrackListAdapter trackListAdapter;
-    private RecyclerView listOfTracks;
-    private String track_to_delete;
 
-    private GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    private int REQUEST_PERMISSION_CODE = 8153;
-    private int LOCATION_SETTINGS_RESOLUTION = 4259;
+    private TrackListAdapter trackListAdapter;  // The adapter used to fill out the list
+    private RecyclerView listOfTracks;          // The recyclerview that holds the list of tracks
+    private String track_to_delete;             // The track the user wants to delete
 
-    private static final int TRACK_LIST_LOADER = 1;
+    private GoogleApiClient mGoogleApiClient;       // The GoogleApiClient for location information
+    Location mLastLocation;                         // Last known location
+    private int REQUEST_PERMISSION_CODE = 8153;     // Code used if a permission request is made
+    private int LOCATION_SETTINGS_RESOLUTION = 4259;// Code used if a settings change is requested
 
+    private static final int TRACK_LIST_LOADER = 1; // The number of the loader being used
+
+    // The projection used to get data from the DB
     private static final String[] TRACK_LIST_COLUMNS = {
             DataContract.TrackEntry.TABLE_NAME + "." + DataContract.TrackEntry._ID,
             DataContract.TrackEntry.COLUMN_TRACK_NAME,
@@ -71,7 +73,7 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
             DataContract.TrackEntry.COLUMN_LONGITUDE
     };
 
-
+    // The column references used to access data on the returned cursor
     static final int COL_TRACK_ENTRY_ID = 0;
     static final int COL_TRACK_NAME = 1;
     static final int COL_TRACK_LATITUDE = 2;
@@ -83,31 +85,37 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_list);
 
+        // Start the GoogleApiClient with location services
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
 
+        // Get reference to the recyclerview
         listOfTracks = (RecyclerView) findViewById(R.id.tracklist_recycler_view);
         listOfTracks.setLayoutManager(new LinearLayoutManager(this));
-
         listOfTracks.setHasFixedSize(true);
 
+        // Create the adapter used to load the recyclerview with info
         trackListAdapter = new TrackListAdapter(this, new TrackListAdapter.TrackListAdapterOnClickHandler() {
+            // The onclick method used when the user wants to either delete or open a map of the track
             @Override
             public boolean onClick(TrackListAdapter.TrackListAdapterViewHolder vh, boolean longClick) {
+                // If it's a long click, prepare options to delete
                 if (longClick) {
+                    // Get the name of the track to delete
                     track_to_delete = vh.trackName.getText().toString();
                     if (track_to_delete != null) {
+                        // Show the delete dialog
                         DialogFragment newDialog = new DeleteDialog();
                         newDialog.show(getSupportFragmentManager(), getString(R.string.delete_dialog));
                         return true;
                     } else
                         return false;
                 } else {
+                    // If it's a short click, send an intent to maps to show the location of the track
                     String geo = "geo:" + vh.fullGpsLocation;
-                    Toast.makeText(TrackListActivity.this, geo, Toast.LENGTH_SHORT).show();
                     Uri gmmIntentUri = Uri.parse(geo);
                     Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     intent.setPackage("com.google.android.apps.maps");
@@ -119,26 +127,35 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
             }
         });
 
+        // Set the adapter for the track recyclerview
         listOfTracks.setAdapter(trackListAdapter);
+        // Start the loader
         getSupportLoaderManager().initLoader(TRACK_LIST_LOADER, null, this);
 
 
     }
 
+    /**
+     * This method works to get location information once the GoogleApiClient is connected
+     * @param bundle
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.v(LOG_TAG, "GoogleApiClient Connected!");
+        // Check to see if we have permission to access location
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            // If we have permission, get the last known location
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         else {
-            Log.v(LOG_TAG, "NO PERMISSION, STARTING LOCATION CONNECTIONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            // If we don't have permission, start this method which will attempt to get permission
             startLocationConnections();
         }
+
+        // Check to see if our current location info exists
         if (mLastLocation != null) {
             Log.v(LOG_TAG, "Latitude is: " + mLastLocation.getLatitude());
             Log.v(LOG_TAG, "Longitude is: " + mLastLocation.getLongitude());
         } else {
-            Log.v(LOG_TAG, "LOCATION IS NULL, STARTING LOCATION CONNECTIONS!!!!!!!!!!!!!!!!!");
+            // If it doesn't, start this method which will send a location request
             startLocationConnections();
         }
 
@@ -154,8 +171,15 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
         }
     }
 
+    /**
+     * This is the return method if a request was made to change location settings
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Make sure it's our request that is being returned a result
         if (requestCode == LOCATION_SETTINGS_RESOLUTION) {
             if (resultCode == RESULT_OK) {
 
@@ -164,6 +188,10 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * This returns a location request to receive location updates
+     * @return
+     */
     protected LocationRequest getLocationRequest() {
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
@@ -172,39 +200,45 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
         return mLocationRequest;
     }
 
+    /**
+     * This method creates a location request, and checks to make sure the settings are acceptable
+     * for the request.  If they are, we can request location updates.  If not, we need to request
+     * it be changed.
+     */
     public void startLocationConnections() {
+        // Create the builder for the request
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(getLocationRequest());
 
+        // Check the location settings to see if they are what we need
         PendingResult<LocationSettingsResult> result =
                 LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient,
                         builder.build());
 
+        // The callback for the result
         result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
             @Override
             public void onResult(LocationSettingsResult result) {
                 final Status status = result.getStatus();
                 final LocationSettingsStates s = result.getLocationSettingsStates();
                 switch (status.getStatusCode()) {
+                    // If the location settings are good, we check permissions again
                     case LocationSettingsStatusCodes.SUCCESS:
                         Log.v(LOG_TAG, "SUCCESS!!!!!!!!!!!!!!!!!!!!!");
                         if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(TrackListActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                            // If we don't have permission, we need to request it.
                             ActivityCompat.requestPermissions(TrackListActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_CODE);
-                            Log.v(LOG_TAG, "PERMISSION WASN'T GRANTED, REQUESTING IT!!!!!!!!!!!!!");
                         } else {
-                            Log.v(LOG_TAG, "PERMISSION WAS GRANTED, REQUESTING LOCATION UPDATES!!!!!!!!!!!!!!");
+                            // Location settings are good, and we have permission, so lets request updates
                             LocationServices.FusedLocationApi.requestLocationUpdates(
                                     mGoogleApiClient, getLocationRequest(), TrackListActivity.this);
                         }
 
                         break;
+                    // Location settings are not what we need, attempting to resolve
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        Log.v(LOG_TAG, "RESOLUTION REQUIRED!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
                         try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
+                            // Show dialog to user by calling startResolutionFoResult on the status
                             status.startResolutionForResult(
                                     TrackListActivity.this,
                                     LOCATION_SETTINGS_RESOLUTION);
@@ -212,8 +246,8 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
                             // Ignore the error.
                         }
                         break;
+                    // The settings are not changeable
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.v(LOG_TAG, "SETTINGS CHANGE UNAVAILABLE!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         // Location settings are not satisfied. However, we have no way to fix the
                         // settings so we won't show the dialog.
                         break;
@@ -223,6 +257,10 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
 
     }
 
+    /**
+     * This method is called when the location changes.  We update our location.
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
@@ -230,97 +268,150 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
         Log.v(LOG_TAG, "NEW LATITUDE: " + mLastLocation.getLatitude());
     }
 
+    /**
+     * Called when the GoogleApiClient connection is suspended
+     * @param i
+     */
     @Override
     public void onConnectionSuspended(int i) {
         Log.v(LOG_TAG, "GoogleApiClient Connection Suspended.");
     }
 
+    /**
+     * Called when the GoogleApiClient connection fails
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.v(LOG_TAG, "GoogleApiClient Connection Failed.");
     }
 
-
+    /**
+     * This method is called when the FAB is clicked to add a new track.  It opens the add track
+     * dialog.
+     * @param view The view clicked
+     */
     public void addTrack(View view) {
         DialogFragment newDialog = new AddTrackDialog();
         newDialog.show(getSupportFragmentManager(), getString(R.string.add_track_dialog));
     }
 
+    /**
+     * When the activity starts, connect to the GoogleApiClient
+     */
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
         super.onStart();
     }
 
+    /**
+     * When the activity stops, disconnect from the GoogleApiClient
+     */
     @Override
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
     }
 
+    /**
+     * This method is called when there is a positive click on the add track dialog.  It will add
+     * the entered track name and if the GPS location box is checked, it will add any GPS information
+     * that is available.
+     * @param dialog
+     */
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
+
         String trackName;
-        Uri insertUri;
         double longitude;
         double latitude;
+
+        // The checkbox for using GPS info
         CheckBox cBox = (CheckBox) dialog.getDialog().findViewById(R.id.Location_checkBox);
+        // The ContentValues for new info to be entered into DB
         ContentValues newTrackValues = new ContentValues();
 
+        // The edittext that was used to enter a new track name
         EditText newTrackName = (EditText) dialog.getDialog().findViewById(R.id.track_name_entry);
+        // Get the new track name from the EditText box
         trackName = newTrackName.getText().toString();
 
+        // Add the track name to the ContentValues
         newTrackValues.put(DataContract.TrackEntry.COLUMN_TRACK_NAME, trackName);
+
+        // See if the user wants to store GPS info, and check if it's available
         if (cBox.isChecked())
+            // See if last location is null
             if (mLastLocation != null) {
+                // If not, get location info and add to ContentValues
                 longitude = mLastLocation.getLongitude();
                 latitude = mLastLocation.getLatitude();
                 newTrackValues.put(DataContract.TrackEntry.COLUMN_LONGITUDE, Double.toString(longitude));
                 newTrackValues.put(DataContract.TrackEntry.COLUMN_LATITUDE, Double.toString(latitude));
             } else {
+                // If location info is null, tell user GPS info is not available
                 Toast.makeText(TrackListActivity.this, R.string.no_gps_info, Toast.LENGTH_SHORT).show();
             }
-        insertUri = getContentResolver().insert(DataContract.TrackEntry.CONTENT_URI, newTrackValues);
 
-
+        // Put new track info into DB
+        getContentResolver().insert(DataContract.TrackEntry.CONTENT_URI, newTrackValues);
     }
 
+    /**
+     * Called if the user cancels the add track dialog
+     * @param dialog
+     */
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        Log.v(LOG_TAG, "NEGATIVE CLICK!!!");
+        // Nothing happens
     }
 
+    /**
+     * This method is called by the Delete dialog if the user long clicks on a track to delete.
+     * It will delete the track along with all associated track days and sessions
+     */
     @Override
     public void delete() {
         if (track_to_delete != null) {
-            int rowsDeleted;
 
+            // Selection to delete sessions on this track
             String selection = DataContract.SessionsEntry.COLUMN_TRACK_NAME + " = ? ";
+            // Selection arg that is the track name
             String[] selectionArgs = new String[]{track_to_delete};
 
-            rowsDeleted = getContentResolver().delete(DataContract.SessionsEntry.CONTENT_URI, selection, selectionArgs);
+            // Delete all sessions on this track
+            getContentResolver().delete(DataContract.SessionsEntry.CONTENT_URI, selection, selectionArgs);
 
-            Log.v(LOG_TAG, "Sessions Deleted: " + rowsDeleted);
-
+            // Selection to delete track days on this track
             selection = DataContract.TrackDays.COLUMN_TRACK_NAME + " = ? ";
-            selectionArgs = new String[]{track_to_delete};
 
-            rowsDeleted = getContentResolver().delete(DataContract.TrackDays.CONTENT_URI, selection, selectionArgs);
+            // Delete all track days on this track
+            getContentResolver().delete(DataContract.TrackDays.CONTENT_URI, selection, selectionArgs);
 
-            Log.v(LOG_TAG, "Track Days Deleted: " + rowsDeleted);
-
+            // Selection to delete the track from track list
             selection = DataContract.TrackEntry.TABLE_NAME + "." + DataContract.TrackEntry.COLUMN_TRACK_NAME + " = ? ";
 
-            rowsDeleted = getContentResolver().delete(DataContract.TrackEntry.CONTENT_URI, selection, selectionArgs);
-            Log.v(LOG_TAG, "Successfully deleted " + track_to_delete + " with number of rows deleted equal to " + rowsDeleted);
+            // Delete the track from the track list
+            getContentResolver().delete(DataContract.TrackEntry.CONTENT_URI, selection, selectionArgs);
+
+            // Notify the data set has changed
             trackListAdapter.notifyDataSetChanged();
+            // Set the track to delete to null
             track_to_delete = null;
         }
     }
 
+    /**
+     * Once the loader is created, it queries for track list data from the DB
+     * @param id The ID of the loader
+     * @param args the args passed
+     * @return
+     */
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         Uri trackListUri = DataContract.TrackEntry.buildTrackListUri();
+        // Return tracks in ASC order by track name
         String sortOrder = DataContract.TrackEntry.COLUMN_TRACK_NAME + " ASC";
         return new CursorLoader(this,
                 trackListUri,
@@ -330,11 +421,20 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
                 sortOrder);
     }
 
+    /**
+     * Once the loader is finished, swap the cursor
+     * @param loader
+     * @param data
+     */
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
         trackListAdapter.swapCursor(data);
     }
 
+    /**
+     * Swap the cursor our for null when the loader resets
+     * @param loader
+     */
     @Override
     public void onLoaderReset(Loader loader) {
         trackListAdapter.swapCursor(null);

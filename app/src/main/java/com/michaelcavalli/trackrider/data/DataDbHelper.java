@@ -24,6 +24,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
+        /* table for list of tracks */
         final String SQL_CREATE_TRACKLIST_TABLE = "CREATE TABLE " + TrackEntry.TABLE_NAME + " (" +
                 TrackEntry._ID + " INTEGER PRIMARY KEY," +
                 TrackEntry.COLUMN_TRACK_NAME + " TEXT UNIQUE ON CONFLICT REPLACE NOT NULL, " +
@@ -31,6 +32,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                 TrackEntry.COLUMN_LATITUDE + " TEXT " +
                 ");";
 
+        /* table for list of track days */
         final String SQL_CREATE_TRACKDAYS_TABLE = "CREATE TABLE " + TrackDays.TABLE_NAME + " (" +
                 TrackDays._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TrackDays.COLUMN_TRACK_NAME + " TEXT NOT NULL, " +
@@ -42,6 +44,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
                 TrackEntry.TABLE_NAME + " (" + TrackEntry._ID + ") " +
                 " );";
 
+        /* table for list of sessions and session data */
         final String SQL_CREATE_SESSIONS_TABLE = "CREATE TABLE " + SessionsEntry.TABLE_NAME + " (" +
 
                 SessionsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -76,11 +79,11 @@ public class DataDbHelper extends SQLiteOpenHelper {
                 SessionsEntry.COLUMN_FRONT_SPROCKET + " TEXT, " +
                 SessionsEntry.COLUMN_REAR_SPROCKET + " TEXT, " +
 
-                // Tie track day key to a track day ID in the track day table
+                // Track day key must always reference a specific track day in the track day table
                 "FOREIGN KEY (" + SessionsEntry.COLUMN_TRACK_DAY_KEY + ") REFERENCES " +
                 TrackDays.TABLE_NAME + " (" + TrackDays._ID + "), " +
 
-                // Session number and track day key should be unique
+                // Session number and track day key should be unique combination
                 " UNIQUE (" + SessionsEntry.COLUMN_TRACK_DAY_KEY + ", " +
                 SessionsEntry.COLUMN_SESSIONS_NUMBER + ") ON CONFLICT REPLACE);";
 

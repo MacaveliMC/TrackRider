@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.michaelcavalli.trackrider">
 
+    <!-- Use these permissions to find GPS location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -11,6 +12,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- Main activity that lists track days -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,13 +21,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Sessions activity that lists sessions for a track day -->
         <activity android:name=".SessionsActivity">
         </activity>
+
+        <!-- Track List activity that lists all tracks entered into the app -->
         <activity android:name=".TrackListActivity">
         </activity>
+
+        <!-- Details activity that holds all information for a session -->
         <activity android:name=".DetailsActivity">
         </activity>
 
+        <!-- The widget provider that updates the widgets -->
         <receiver android:name=".widget.TrackRiderWidgetProvider"
             android:label="Track Rider Widget">
             <intent-filter>
@@ -34,6 +44,7 @@
                 android:resource="@xml/trackrider_appwidget_info" />
         </receiver>
 
+        <!-- The data provider that holds all track day and tracks information -->
         <provider
             android:name=".data.DataProvider"
             android:authorities="@string/content_authority"

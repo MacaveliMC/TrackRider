@@ -12,11 +12,12 @@ import android.view.LayoutInflater;
 import com.michaelcavalli.trackrider.R;
 
 /**
- * Created by silen_000 on 8/7/2016.
+ * This dialog is used to delete tracks, track days, or sessions from the database
  */
 public class DeleteDialog extends DialogFragment {
     private static final String LOG_TAG = DeleteDialog.class.getSimpleName();
 
+    // The return interface activity
     DeleteCallback dataReturnActivity;
 
     @Override
@@ -29,29 +30,35 @@ public class DeleteDialog extends DialogFragment {
                 .setPositiveButton(R.string.OK_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.v(LOG_TAG, "OK TO DELETE");
+                        // Call the delete method in the return activity interface
                         dataReturnActivity.delete();
                     }
                 })
                 .setNegativeButton(R.string.Cancel_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        // Do nothing, delete cancelled
                     }
                 });
 
         return builder.create();
     }
 
+    // Interface that must be implemented by the attached activity
     public interface DeleteCallback {
         public void delete();
     }
 
+    /**
+     * Must make sure attached activity implements the interface
+     * @param context attached activity
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         try{
+            // Attached activity must implement the interface
             dataReturnActivity = (DeleteCallback) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement the DataReturnInterface");

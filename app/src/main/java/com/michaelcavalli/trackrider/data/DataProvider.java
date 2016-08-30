@@ -27,13 +27,17 @@ public class DataProvider extends ContentProvider {
     static final int SESSIONS_WITH_TRACKDAY_ID= 200;
     static final int SESSION_WITH_TRACKDAY_ID_AND_NUMBER = 201;
 
+    // Query data between the track list and track day table
     private static final SQLiteQueryBuilder dataQueryBuilder;
+
+    // Query data between the track day and sessions table
     private static final SQLiteQueryBuilder sessionsQueryBuilder;
 
     static {
         dataQueryBuilder = new SQLiteQueryBuilder();
         sessionsQueryBuilder = new SQLiteQueryBuilder();
 
+        // Table for data between the track list and track days tables
         dataQueryBuilder.setTables(
                 DataContract.TrackDays.TABLE_NAME + " INNER JOIN " +
                         DataContract.TrackEntry.TABLE_NAME +
@@ -42,6 +46,7 @@ public class DataProvider extends ContentProvider {
                         " = " + DataContract.TrackEntry.TABLE_NAME +
                         "." + DataContract.TrackEntry._ID);
 
+        // Table for data between the track day and sessions tables
         sessionsQueryBuilder.setTables(
                 DataContract.SessionsEntry.TABLE_NAME + " INNER JOIN " +
                         DataContract.TrackDays.TABLE_NAME +
@@ -52,13 +57,20 @@ public class DataProvider extends ContentProvider {
         );
     }
 
+    // For returning list of sessions for a specific track day
     private static final String trackDaySelection =
             DataContract.SessionsEntry.TABLE_NAME + "." + DataContract.SessionsEntry.COLUMN_TRACK_DAY_KEY + " = ? ";
 
+    // For returning data from a specific session based on track day key and session number
     private static final String sessionSelection =
             DataContract.SessionsEntry.TABLE_NAME + "." + DataContract.SessionsEntry.COLUMN_TRACK_DAY_KEY + " = ? AND " +
             DataContract.SessionsEntry.COLUMN_SESSIONS_NUMBER + " = ? ";
 
+    /**
+     * @param sortOrder order to return tracks in
+     * @param projection columns to return
+     * @return cursor with a list of tracks for tracks list activity
+     */
     private Cursor getTrackList(String sortOrder, String[] projection) {
         return mDataHelper.getReadableDatabase().query(
                 DataContract.TrackEntry.TABLE_NAME,
@@ -71,6 +83,11 @@ public class DataProvider extends ContentProvider {
                 );
     }
 
+    /**
+     * @param sortOrder order is by date
+     * @param projection columns to return
+     * @return cursor with a list of all track days to main activity
+     */
     private Cursor getTrackDays(String sortOrder, String[] projection) {
         return mDataHelper.getReadableDatabase().query(
                 DataContract.TrackDays.TABLE_NAME,
@@ -83,6 +100,12 @@ public class DataProvider extends ContentProvider {
         );
     }
 
+    /**
+     * @param uri database to search
+     * @param projection columns to return
+     * @param sortOrder order is by session number
+     * @return cursor with a list of sessions for a specific track day
+     */
     private Cursor getSessionsList(Uri uri, String[] projection, String sortOrder) {
         String trackDayId = DataContract.SessionsEntry.getTrackDayIDFromUri(uri);
 
@@ -98,16 +121,17 @@ public class DataProvider extends ContentProvider {
                 sortOrder);
     }
 
+    /**
+     * @param uri database to search
+     * @param projection cloumns to return
+     * @return cursor pointing to a specific session on a specific track day
+     */
     private Cursor getSessionData(Uri uri, String[] projection) {
         String trackDayId = DataContract.SessionsEntry.getTrackDayIDFromUri(uri);
-        Log.v(LOG_TAG, "PROVIDER - TRACK DAY ID IS: " + trackDayId);
         String sessionNumber = DataContract.SessionsEntry.getSessionNumberFromUri(uri);
-        Log.v(LOG_TAG, "PROVIDER - SESSION NUMBER IS: " + sessionNumber);
 
         String[] selectionArgs = new String[]{trackDayId, sessionNumber};
         String selection = sessionSelection;
-
-        Log.v(LOG_TAG, "PROVIDER - SELECTION IS: " + selection);
 
         return sessionsQueryBuilder.query(mDataHelper.getReadableDatabase(),
                 projection,
@@ -118,7 +142,10 @@ public class DataProvider extends ContentProvider {
                 null);
     }
 
-
+    /**
+     *  builds uri matcher to figure out what request is searching for
+     * @return
+     */
     static UriMatcher buildUriMatcher(){
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = DataContract.CONTENT_AUTHORITY;
@@ -144,6 +171,14 @@ public class DataProvider extends ContentProvider {
         return true;
     }
 
+    /**
+     * @param uri database to search
+     * @param projection columns to return
+     * @param selection specific selection in database
+     * @param selectionArgs argument for selections
+     * @param sortOrder sort order requested
+     * @return cursor of selection
+     */
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -169,6 +204,10 @@ public class DataProvider extends ContentProvider {
         return retCursor;
     }
 
+    /**
+     * @param uri database search request
+     * @return either content_type or content_item_type
+     */
     @Nullable
     @Override
     public String getType(Uri uri) {
@@ -191,6 +230,11 @@ public class DataProvider extends ContentProvider {
         }
     }
 
+    /**
+     * @param uri database to insert into
+     * @param values values to insert into database
+     * @return Uri pointing to new data in database
+     */
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -231,6 +275,12 @@ public class DataProvider extends ContentProvider {
         return returnUri;
     }
 
+    /**
+     * @param uri database
+     * @param selection specific selection to be deleted
+     * @param selectionArgs arguments for selection
+     * @return the number of rows deleted
+     */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mDataHelper.getReadableDatabase();
@@ -259,6 +309,13 @@ public class DataProvider extends ContentProvider {
         return rowsDeleted;
     }
 
+    /**
+     * @param uri database to update
+     * @param values values to update
+     * @param selection specific selection to search for
+     * @param selectionArgs arguments for selection
+     * @return the number of rows updated
+     */
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mDataHelper.getReadableDatabase();

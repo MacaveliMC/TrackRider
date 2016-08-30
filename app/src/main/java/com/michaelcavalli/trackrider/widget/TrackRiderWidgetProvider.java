@@ -14,15 +14,23 @@ import com.michaelcavalli.trackrider.R;
 import com.michaelcavalli.trackrider.data.DataContract;
 
 /**
- * Created by silen_000 on 8/13/2016.
+ * The widget that displays track days
  */
 public class TrackRiderWidgetProvider extends AppWidgetProvider {
 
+    /**
+     * On system update reqeusts, updates any widgets that exist
+     * @param context
+     * @param appWidgetManager
+     * @param appWidgetIds
+     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
+        //How many widgets need to be updated
         final int N = appWidgetIds.length;
 
+        // Context used to get data provider
         Context c = context;
 
         // Perform this loop procedure for each App Widget that belongs to this provider
@@ -34,16 +42,24 @@ public class TrackRiderWidgetProvider extends AppWidgetProvider {
 
             Cursor trackDays = c.getContentResolver().query(DataContract.TrackDays.CONTENT_URI, null, null, null, sortOrder);
 
+            // Make sure cursor is not null
             if (trackDays != null) {
+                // If cursor is not null, make sure data exists
                 if (trackDays.getCount() > 0) {
+                    // Move to first to get info from latest track day
                     trackDays.moveToFirst();
+                    // Fill info from latest track day
                     trackName = trackDays.getString(1);
                     trackDate = trackDays.getString(3);
-                } else {
+                }
+                // If no data, fill with default info
+                else {
                     trackName = "NO TRACK DAYS";
                     trackDate = "";
                 }
-            } else {
+            }
+            // If cursor is null, fill with default data
+            else {
                 trackName = "NO TRACK DAYS";
                 trackDate = "";
             }
@@ -57,11 +73,14 @@ public class TrackRiderWidgetProvider extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.trackrider_appwidget);
             RemoteViews lv = new RemoteViews(context.getPackageName(), R.layout.trackday_list_item);
 
+            // Add data to textviews
             lv.setTextViewText(R.id.track_name, trackName);
             lv.setTextViewText(R.id.trackday_date, trackDate);
 
+            // Add view for track day to layout
             views.addView(R.id.widget_linear_layout, lv);
 
+            // Set the onclick listener to the view
             views.setOnClickPendingIntent(R.id.widget_linear_layout, pendingIntent);
 
             // Tell the AppWidgetManager to perform an update on the current app widget

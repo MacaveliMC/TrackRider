@@ -9,19 +9,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
- * Created by silen_000 on 8/9/2016.
+ * This is the adapter for the session list activity
  */
 public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.SessionViewHolder> {
     private static final String LOG_TAG = SessionListAdapter.class.getSimpleName();
-    private Cursor sessionListCursor;
-    private SessionListOnClickHandler sessionListClickHandler;
-    private Context context;
 
+    private Cursor sessionListCursor;                           // Cursor for list of sessions
+    private SessionListOnClickHandler sessionListClickHandler;  // The call back for clicking on a session
+    private Context context;                                    // The context of the session activity
+
+    // The viewholder for this recyclerview
     public class SessionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
-        public TextView sessionNumberView;
-        public int sessionNumber;
-        public int sessionId;
-        public int trackDayKey;
+        public TextView sessionNumberView;      // This textview displays the session number
+        public int sessionNumber;               // This is the session number
+        public int sessionId;                   // This is the session ID
+        public int trackDayKey;                 // This is the track day ID
 
         public SessionViewHolder (View view){
             super(view);
@@ -31,17 +33,27 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
 
         }
 
+        /**
+         * This method sends clicks back to the click handler activity through the onClick method.
+         * @param view The view that was clicked
+         */
         @Override
         public void onClick(View view) {
             sessionListClickHandler.onClick(this, false);
         }
 
+        /**
+         * This method sends long clicks back to the click handler activity through the onClick method.
+         * @param view The view that was long clicked
+         * @return
+         */
         @Override
         public boolean onLongClick(View view) {
             return sessionListClickHandler.onClick(this, true);
         }
     }
 
+    // The interface that must be implemented
     public static interface SessionListOnClickHandler{
         boolean onClick(SessionViewHolder vh, boolean longClick);
     }
@@ -51,8 +63,14 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         sessionListClickHandler = ch;
     }
 
+    /**
+     * This method creates the viewholder and returns it
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
-    public SessionListAdapter.SessionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SessionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(parent instanceof RecyclerView){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_list_item, parent, false);
             return new SessionViewHolder(view);
@@ -61,14 +79,22 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         }
     }
 
+    /**
+     * This method binds the appropriate data from the cursor to the viewholder based on position
+     * @param holder The viewholder to bind data to
+     * @param position The position of the viewholder
+     */
     @Override
     public void onBindViewHolder(SessionListAdapter.SessionViewHolder holder, int position) {
+        // Move to the position being binded
         sessionListCursor.moveToPosition(position);
 
+        //  Set the viewholder info and get info from cursor
         holder.sessionNumber = sessionListCursor.getInt(SessionsActivity.COL_SESSION_NUMER);
         int sessionId = sessionListCursor.getInt(SessionsActivity.COL_SESSION_ID);
         int track_day_id = sessionListCursor.getInt(SessionsActivity.COL_TRACK_DAY_KEY);
 
+        // Set the info in the layout and viewholder
         holder.sessionNumberView.setText("Session " + holder.sessionNumber);
         holder.sessionNumberView.setContentDescription("Session number " + holder.sessionNumber);
         holder.sessionId = sessionId;
@@ -76,6 +102,10 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
 
     }
 
+    /**
+     * Returns item count of adapter cursor
+     * @return
+     */
     @Override
     public int getItemCount() {
         if(sessionListCursor == null){
@@ -84,6 +114,10 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             return sessionListCursor.getCount();
     }
 
+    /**
+     * Swaps the cursor for a new one and notifies the data set changed.
+     * @param newCursor
+     */
     public void swapCursor(Cursor newCursor){
         sessionListCursor = newCursor;
         if(sessionListCursor != null){

@@ -15,11 +15,12 @@ import android.widget.EditText;
 import com.michaelcavalli.trackrider.R;
 
 /**
- * Created by silen_000 on 8/6/2016.
+ * The dialog for adding tracks to the track list
  */
 public class AddTrackDialog extends DialogFragment {
     private static final String LOG_TAG = AddTrackDialog.class.getSimpleName();
 
+    // The return interface, for returning track information
     DataReturnInterface dataReturnActivity;
 
     @Override
@@ -30,18 +31,19 @@ public class AddTrackDialog extends DialogFragment {
         EditText newTrack;
 
         builder.setTitle(R.string.add_track_title)
-
+                // Create the dialog using the add_track_dialog layout
                 .setView(inflater.inflate(R.layout.add_track_dialog, null))
-                // Add action buttons
                 .setPositiveButton(R.string.OK_button,  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        // Call the return interface method with a reference to this dialog
                         dataReturnActivity.onDialogPositiveClick(AddTrackDialog.this);
                     }
                 })
                 .setNegativeButton(R.string.Cancel_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        // Call the return interface method with a reference to this dialog
                         dataReturnActivity.onDialogNegativeClick(AddTrackDialog.this);
                     }
                 });
@@ -49,12 +51,16 @@ public class AddTrackDialog extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * On attaching the dialog to the activity, pass the activity as the returning interface
+     * @param context the activity this dialog is attached to
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        Log.v(LOG_TAG, "HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         try{
+            // Activity dialog is attached to has to be a DataReturnInterface
             dataReturnActivity = (DataReturnInterface) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement the DataReturnInterface");
@@ -62,6 +68,9 @@ public class AddTrackDialog extends DialogFragment {
 
     }
 
+    /**
+     * Interface that must be implemented by activity that creates this dialog
+     */
     public interface DataReturnInterface {
         public void onDialogPositiveClick(DialogFragment dialog);
         public void onDialogNegativeClick(DialogFragment dialog);

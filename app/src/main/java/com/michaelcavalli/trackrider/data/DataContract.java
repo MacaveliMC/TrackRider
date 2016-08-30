@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * Created by silen_000 on 8/6/2016.
+ * This contact describes the tables that hold all track, track day, and session information
  */
 public class DataContract {
 
@@ -40,7 +40,6 @@ public class DataContract {
         // Latitude
         public static final String COLUMN_LATITUDE = "track_latitude";
 
-        // Add GPS Location Information
 
         public static Uri buildTrackUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -52,6 +51,7 @@ public class DataContract {
 
     }
 
+    /* Inner class that defines the table contents of the trackdays table */
     public static final class TrackDays implements BaseColumns{
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRACK_DAYS).build();
@@ -95,6 +95,7 @@ public class DataContract {
         // Table name
         public static final String TABLE_NAME = "sessions";
 
+        // lap  times
         public static final String COLUMN_LAP_TIMES = "lap_times";
 
         // Track name
@@ -169,8 +170,6 @@ public class DataContract {
         public static String getSessionNumberFromUri(Uri uri){
             return uri.getPathSegments().get(2);
         }
-
-
     }
 
 }
