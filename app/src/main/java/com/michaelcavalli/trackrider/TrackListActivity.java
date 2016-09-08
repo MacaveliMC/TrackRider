@@ -115,6 +115,10 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
                         return false;
                 } else {
                     // If it's a short click, send an intent to maps to show the location of the track
+                    if(vh.fullGpsLocation == null) {
+                        Toast.makeText(TrackListActivity.this, R.string.no_gps_info, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                     String geo = "geo:" + vh.fullGpsLocation;
                     Uri gmmIntentUri = Uri.parse(geo);
                     Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);

@@ -128,6 +128,8 @@ public class AddTrackDayDialog extends DialogFragment implements LoaderManager.L
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(data.getCount() == 0){
+        }
         tracklistCursor=data;
         sca.swapCursor(tracklistCursor);
     }

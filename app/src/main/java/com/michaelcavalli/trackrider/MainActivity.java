@@ -385,6 +385,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Bundle args = new Bundle();
         DialogFragment addTrackDialog = new AddTrackDayDialog();
 
+        if(trackListEmpty()){
+            Toast.makeText(MainActivity.this, R.string.track_list_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // If the last location is not null, check and see if we are close to any tracks
         if (mLastLocation != null) {
             ContentValues closeTrack = checkForCloseTrack();
@@ -402,6 +407,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             addTrackDialog.show(getSupportFragmentManager(), getString(R.string.add_track_dialog));
 
 
+    }
+
+    /**
+     * Checks if the track list is empty
+     * @return true if empty, false if not
+     */
+    public boolean trackListEmpty(){
+        Cursor trackList = getContentResolver().query(DataContract.TrackEntry.CONTENT_URI, null, null, null, null);
+        if(trackList == null || trackList.getCount() == 0)
+            return true;
+        else
+            return false;
     }
 
     /**

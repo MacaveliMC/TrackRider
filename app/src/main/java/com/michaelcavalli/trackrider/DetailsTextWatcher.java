@@ -26,7 +26,11 @@ public class DetailsTextWatcher implements TextWatcher {
      */
     public DetailsTextWatcher(EditText et, Context c){
         editText=et;
-        callBack = (TextWatcherCallback) c;
+        try {
+            callBack = (TextWatcherCallback) c;
+        } catch (ClassCastException e){
+            throw new ClassCastException(c.toString() + " must implement the TextWatcherCallback Interface");
+        }
     }
 
     // Gets the text before it changed
