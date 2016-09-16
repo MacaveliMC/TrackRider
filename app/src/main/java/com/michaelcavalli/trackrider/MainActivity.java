@@ -43,6 +43,7 @@ import com.michaelcavalli.trackrider.data.DataContract;
 import com.michaelcavalli.trackrider.dialogs.AddTrackDayDialog;
 import com.michaelcavalli.trackrider.dialogs.AddTrackDialog;
 import com.michaelcavalli.trackrider.dialogs.DeleteDialog;
+import com.michaelcavalli.trackrider.util.LocationHelper;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -177,23 +178,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mLastLocation = new Location("spoof location");
 
-
         // Once connected, we check if we have permission to access coarse location.
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if (LocationHelper.checkPermission(this)) {
             // If we have permission, we attempt to get the latest location from the API
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        else {
+            // If location is null, request updates
+            if (mLastLocation == null)
+                requestLocationUpdates();
+        } else {
             // If we don't have permission, we attempt to get it
-            startLocationConnections();
-        }
-        // If location is not null, get longitude and latitude
-        if (mLastLocation != null) {
-            Log.v(LOG_TAG, "Latitude is: " + mLastLocation.getLatitude());
-            Log.v(LOG_TAG, "Longitude is: " + mLastLocation.getLongitude());
-        }
-        // If location is null, call method to change permissions and location settings
-        else {
-            startLocationConnections();
+            LocationHelper.requestPermission(MainActivity.this, REQUEST_PERMISSION_CODE);
         }
     }
 
@@ -208,9 +202,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION_CODE) {
             // If the permission request was a success, go ahead and request location updates
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(
-                        mGoogleApiClient, getLocationRequest(), this);
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && LocationHelper.checkPermission(this)) {
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                // If location is null, request updates
+                if (mLastLocation == null)
+                    requestLocationUpdates();
             }
         }
     }
@@ -226,19 +222,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LOCATION_SETTINGS_RESOLUTION) {
             if (resultCode == RESULT_OK) {
-
+                requestLocationUpdates();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    // The location request we want to use
-    protected LocationRequest getLocationRequest() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        return mLocationRequest;
     }
 
     /**
@@ -246,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * for the request.  If they are, we can request location updates.  If not, we need to request
      * it be changed.
      */
-    public void startLocationConnections() {
+    private void requestLocationUpdates() {
         // Create the builder for the request
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(getLocationRequest());
@@ -265,25 +252,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 switch (status.getStatusCode()) {
                     // If the location settings are good, we check permissions again
                     case LocationSettingsStatusCodes.SUCCESS:
-                        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                            // If we don't have permission, we need to request it.
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_CODE);
-                        } else {
+                        if (LocationHelper.checkPermission(MainActivity.this)) {
                             // Location settings are good, and we have permission, so lets request updates
                             LocationServices.FusedLocationApi.requestLocationUpdates(
                                     mGoogleApiClient, getLocationRequest(), MainActivity.this);
+                        } else {
+                            // If we don't have permission, we need to request it.
+                            LocationHelper.requestPermission(MainActivity.this, REQUEST_PERMISSION_CODE);
                         }
                         break;
                     // Location settings are not what we need, attempting to resolve
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            // Show dialog to user by calling startResolutionFoResult on the status
-                            status.startResolutionForResult(
-                                    MainActivity.this,
-                                    LOCATION_SETTINGS_RESOLUTION);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
+                        // Show dialog to user by calling startResolutionFoResult on the status
+                        LocationHelper.resolutionForResult(MainActivity.this, status, LOCATION_SETTINGS_RESOLUTION);
                         break;
                     // The settings are not changeable
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
@@ -293,22 +274,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
             }
         });
-
     }
+
+    // The location request we want to use
+    protected LocationRequest getLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return mLocationRequest;
+    }
+
 
     /**
      * This method is called when the location changes.  We update our location.
+     *
      * @param location
      */
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        Log.v(LOG_TAG, "NEW LONGITUDE: " + mLastLocation.getLongitude());
-        Log.v(LOG_TAG, "NEW LATITUDE: " + mLastLocation.getLatitude());
     }
 
     /**
      * Called when the GoogleApiClient connection is suspended
+     *
      * @param i
      */
     @Override
@@ -318,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /**
      * Called when the GoogleApiClient connection fails
+     *
      * @param connectionResult
      */
     @Override
@@ -354,9 +345,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /**
      * This method opens the session list based on which track day was clicked
-     * @param id The ID of the track day to pull sessions for
+     *
+     * @param id        The ID of the track day to pull sessions for
      * @param trackName The track name for the track day
-     * @param date The date of the track day
+     * @param date      The date of the track day
      */
     public void openSessionList(int id, String trackName, String date) {
         Uri uri = DataContract.SessionsEntry.buildSessionsWithTrackDayId(id);
@@ -369,6 +361,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /**
      * The intent to open the track list screen from the track list button
+     *
      * @param view
      */
     public void openTrackList(View view) {
@@ -379,13 +372,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     /**
      * This method adds a new track based either on selection from the dialog or from a track
      * location being close based on GPS
+     *
      * @param v
      */
     public void addTrackDay(View v) {
         Bundle args = new Bundle();
         DialogFragment addTrackDialog = new AddTrackDayDialog();
 
-        if(trackListEmpty()){
+        if (trackListEmpty()) {
             Toast.makeText(MainActivity.this, R.string.track_list_empty, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -411,11 +405,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /**
      * Checks if the track list is empty
+     *
      * @return true if empty, false if not
      */
-    public boolean trackListEmpty(){
+    public boolean trackListEmpty() {
         Cursor trackList = getContentResolver().query(DataContract.TrackEntry.CONTENT_URI, null, null, null, null);
-        if(trackList == null || trackList.getCount() == 0)
+        if (trackList == null || trackList.getCount() == 0)
             return true;
         else
             return false;
@@ -424,6 +419,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     /**
      * This method uses a current location and the GPS location for tracks in the database
      * to check if we are close to a track when  the add track day button is pushed.
+     *
      * @return A content values object with the info for a new track day
      */
     public ContentValues checkForCloseTrack() {
@@ -481,6 +477,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /**
      * On creating the loader, get track day info from the DB
+     *
      * @param id
      * @param args
      * @return
@@ -500,6 +497,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /**
      * Swap out the cursor for the new one with the track day list info
+     *
      * @param loader
      * @param data
      */

@@ -41,6 +41,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.michaelcavalli.trackrider.data.DataContract;
 import com.michaelcavalli.trackrider.dialogs.AddTrackDialog;
 import com.michaelcavalli.trackrider.dialogs.DeleteDialog;
+import com.michaelcavalli.trackrider.util.LocationHelper;
 
 import java.util.Date;
 
@@ -145,32 +146,31 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
      */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        // Check to see if we have permission to access location
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-            // If we have permission, get the last known location
+
+        mLastLocation = new Location("spoof location");
+
+        // Once connected, we check if we have permission to access coarse location.
+        if (LocationHelper.checkPermission(this)) {
+            // If we have permission, we attempt to get the latest location from the API
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        else {
-            // If we don't have permission, start this method which will attempt to get permission
-            startLocationConnections();
-        }
-
-        // Check to see if our current location info exists
-        if (mLastLocation != null) {
-            Log.v(LOG_TAG, "Latitude is: " + mLastLocation.getLatitude());
-            Log.v(LOG_TAG, "Longitude is: " + mLastLocation.getLongitude());
+            // If location is null, request updates
+            if (mLastLocation == null)
+                requestLocationUpdates();
         } else {
-            // If it doesn't, start this method which will send a location request
-            startLocationConnections();
+            // If we don't have permission, we attempt to get it
+            LocationHelper.requestPermission(TrackListActivity.this, REQUEST_PERMISSION_CODE);
         }
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(
-                        mGoogleApiClient, getLocationRequest(), this);
+            // If the permission request was a success, go ahead and request location updates
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && LocationHelper.checkPermission(this)) {
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                // If location is null, request updates
+                if (mLastLocation == null)
+                    requestLocationUpdates();
             }
         }
     }
@@ -183,25 +183,12 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Make sure it's our request that is being returned a result
         if (requestCode == LOCATION_SETTINGS_RESOLUTION) {
             if (resultCode == RESULT_OK) {
-
+                requestLocationUpdates();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * This returns a location request to receive location updates
-     * @return
-     */
-    protected LocationRequest getLocationRequest() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        return mLocationRequest;
     }
 
     /**
@@ -209,10 +196,10 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
      * for the request.  If they are, we can request location updates.  If not, we need to request
      * it be changed.
      */
-    public void startLocationConnections() {
+    private void requestLocationUpdates() {
         // Create the builder for the request
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(getLocationRequest());
+                .addLocationRequest(LocationHelper.getLocationRequest());
 
         // Check the location settings to see if they are what we need
         PendingResult<LocationSettingsResult> result =
@@ -228,27 +215,19 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
                 switch (status.getStatusCode()) {
                     // If the location settings are good, we check permissions again
                     case LocationSettingsStatusCodes.SUCCESS:
-                        Log.v(LOG_TAG, "SUCCESS!!!!!!!!!!!!!!!!!!!!!");
-                        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(TrackListActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                            // If we don't have permission, we need to request it.
-                            ActivityCompat.requestPermissions(TrackListActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_CODE);
-                        } else {
+                        if (LocationHelper.checkPermission(TrackListActivity.this)) {
                             // Location settings are good, and we have permission, so lets request updates
                             LocationServices.FusedLocationApi.requestLocationUpdates(
-                                    mGoogleApiClient, getLocationRequest(), TrackListActivity.this);
+                                    mGoogleApiClient, LocationHelper.getLocationRequest(), TrackListActivity.this);
+                        } else {
+                            // If we don't have permission, we need to request it.
+                            LocationHelper.requestPermission(TrackListActivity.this, REQUEST_PERMISSION_CODE);
                         }
-
                         break;
                     // Location settings are not what we need, attempting to resolve
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            // Show dialog to user by calling startResolutionFoResult on the status
-                            status.startResolutionForResult(
-                                    TrackListActivity.this,
-                                    LOCATION_SETTINGS_RESOLUTION);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
+                        // Show dialog to user by calling startResolutionFoResult on the status
+                        LocationHelper.resolutionForResult(TrackListActivity.this, status, LOCATION_SETTINGS_RESOLUTION);
                         break;
                     // The settings are not changeable
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
@@ -258,7 +237,6 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
                 }
             }
         });
-
     }
 
     /**
@@ -268,8 +246,6 @@ public class TrackListActivity extends AppCompatActivity implements AddTrackDial
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        Log.v(LOG_TAG, "NEW LONGITUDE: " + mLastLocation.getLongitude());
-        Log.v(LOG_TAG, "NEW LATITUDE: " + mLastLocation.getLatitude());
     }
 
     /**
