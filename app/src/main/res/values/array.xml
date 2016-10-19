@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="select_options">
+        <item>Change Track Day Name</item>
+        <item>Delete Track Day</item>
+    </string-array>
+
+</resources>

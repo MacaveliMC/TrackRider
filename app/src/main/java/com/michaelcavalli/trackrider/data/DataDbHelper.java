@@ -35,6 +35,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         /* table for list of track days */
         final String SQL_CREATE_TRACKDAYS_TABLE = "CREATE TABLE " + TrackDays.TABLE_NAME + " (" +
                 TrackDays._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TrackDays.COLUMN_TRACK_DAY_NAME + " TEXT NOT NULL, " +
                 TrackDays.COLUMN_TRACK_NAME + " TEXT NOT NULL, " +
                 TrackDays.COLUMN_TRACK_KEY + " INTEGER NOT NULL, " +
                 TrackDays.COLUMN_TRACK_DAY_DATE + " INT NOT NULL, " +

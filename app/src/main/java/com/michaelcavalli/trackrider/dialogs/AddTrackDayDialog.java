@@ -3,23 +3,15 @@ package com.michaelcavalli.trackrider.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.location.Location;
 import android.net.Uri;
-import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.widget.ListAdapter;
-import android.widget.TextView;
 
 import com.michaelcavalli.trackrider.R;
 import com.michaelcavalli.trackrider.data.DataContract;
@@ -92,6 +84,7 @@ public class AddTrackDayDialog extends DialogFragment implements LoaderManager.L
                         ContentValues cv = new ContentValues();
 
                         // Add new track day values
+                        cv.put(DataContract.TrackDays.COLUMN_TRACK_DAY_NAME, getString(R.string.temp_track_day_name));
                         cv.put(DataContract.TrackDays.COLUMN_TRACK_NAME, trackDayTrack);
                         cv.put(DataContract.TrackDays.COLUMN_TRACK_KEY, trackKey);
                         cv.put(DataContract.TrackDays.COLUMN_TRACK_DAY_DATE, trackDayDate);

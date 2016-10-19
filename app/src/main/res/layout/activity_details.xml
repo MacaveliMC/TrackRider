@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
+        android:background="@color/primary_light"
         android:fillViewport="false"
         android:padding="4dp">
 
@@ -22,28 +23,28 @@
 
             <ImageView
                 android:id="@+id/lapTimes"
-                android:onClick="expandButton"
-                android:focusable="true"/>
+                android:focusable="true"
+                android:onClick="expandButton" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/lap_times_title_desc"
+                android:focusable="true"
                 android:text="@string/lap_times_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical"
-                android:focusable="true"
-                android:contentDescription="@string/lap_times_title_desc"/>
+                app:layout_gravity="center_vertical" />
 
             <Button
                 android:id="@+id/add_lap_time_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/add_lap_time_button_desc"
+                android:focusable="true"
+                android:onClick="addLapTime"
                 android:text="@string/add_lap_time_button"
                 app:layout_columnSpan="3"
-                app:layout_gravity="center_horizontal"
-                android:onClick="addLapTime"
-                android:focusable="true"
-                android:contentDescription="@string/add_lap_time_button_desc"/>
+                app:layout_gravity="center_horizontal" />
 
             <LinearLayout
                 android:id="@+id/lap_times_linearlayout"
@@ -51,23 +52,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginStart="50dp"
-                app:layout_columnSpan="3"
-                android:orientation="vertical"/>
+                android:orientation="vertical"
+                app:layout_columnSpan="3" />
 
 
             <ImageView
                 android:id="@+id/suspension"
-                android:onClick="expandButton"
-                android:focusable="true"/>
+                android:focusable="true"
+                android:onClick="expandButton" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/suspension_title_desc"
+                android:focusable="true"
                 android:text="@string/suspension_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical"
-                android:focusable="true"
-                android:contentDescription="@string/suspension_title_desc"/>
+                app:layout_gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/frontCompressionTitle"
@@ -77,16 +78,16 @@
                 android:layout_marginStart="50dp"
                 android:text="@string/front_compression"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical"/>
+                app:layout_gravity="center_vertical" />
 
             <EditText
                 android:id="@+id/frontCompressionValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/front_compression_desc"
                 android:focusable="true"
-                android:contentDescription="@string/front_compression_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/frontReboundTitle"
@@ -102,10 +103,10 @@
                 android:id="@+id/frontReboundValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/front_rebound_desc"
                 android:focusable="true"
-                android:contentDescription="@string/front_rebound_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/frontPreloadTitle"
@@ -121,10 +122,10 @@
                 android:id="@+id/frontPreloadValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/front_preload_desc"
                 android:focusable="true"
-                android:contentDescription="@string/front_preload_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/forkHeightTitle"
@@ -140,10 +141,10 @@
                 android:id="@+id/forkHeightValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/fork_height_desc"
                 android:focusable="true"
-                android:contentDescription="@string/fork_height_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/oilHeightTitle"
@@ -159,10 +160,10 @@
                 android:id="@+id/oilHeightValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/oil_height_desc"
                 android:focusable="true"
-                android:contentDescription="@string/oil_height_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/frontSpringRateTitle"
@@ -178,10 +179,10 @@
                 android:id="@+id/frontSpringRateValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/front_spring_rate_desc"
                 android:focusable="true"
-                android:contentDescription="@string/front_spring_rate_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearCompressionTitle"
@@ -197,10 +198,10 @@
                 android:id="@+id/rearCompressionValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_compression_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_compression_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearReboundTitle"
@@ -216,10 +217,10 @@
                 android:id="@+id/rearReboundValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_rebound_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_rebound_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearPreloadTitle"
@@ -235,10 +236,10 @@
                 android:id="@+id/rearPreloadValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_preload_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_preload_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearHeightTitle"
@@ -254,10 +255,10 @@
                 android:id="@+id/rearHeightValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_height_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_height_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearSpringRateTitle"
@@ -273,23 +274,23 @@
                 android:id="@+id/rearSpringRateValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_spring_rate_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_spring_rate_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <ImageView
                 android:id="@+id/tires"
-                android:onClick="expandButton"/>
+                android:onClick="expandButton" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/tires_title_desc"
+                android:focusable="true"
                 android:text="@string/tires_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical"
-                android:focusable="true"
-                android:contentDescription="@string/tires_title_desc"/>
+                app:layout_gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/frontTirePressureOutTitle"
@@ -305,10 +306,10 @@
                 android:id="@+id/frontTirePressureOutValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/front_tire_pressure_out_desc"
                 android:focusable="true"
-                android:contentDescription="@string/front_tire_pressure_out_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/frontTirePressureInTitle"
@@ -324,10 +325,10 @@
                 android:id="@+id/frontTirePressureInValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/front_tire_pressure_in_desc"
                 android:focusable="true"
-                android:contentDescription="@string/front_tire_pressure_in_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearTirePressureOutTitle"
@@ -343,10 +344,10 @@
                 android:id="@+id/rearTirePressureOutValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_tire_pressure_out_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_tire_pressure_out_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearTirePressureInTitle"
@@ -362,23 +363,23 @@
                 android:id="@+id/rearTirePressureInValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_tire_pressure_in_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_tire_pressure_in_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <ImageView
                 android:id="@+id/gearing"
-                android:onClick="expandButton"/>
+                android:onClick="expandButton" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/gearing_title_desc"
+                android:focusable="true"
                 android:text="@string/gearing_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical"
-                android:focusable="true"
-                android:contentDescription="@string/gearing_title_desc"/>
+                app:layout_gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/frontSprocketTitle"
@@ -394,10 +395,10 @@
                 android:id="@+id/frontSprocketValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/front_sprocket_desc"
                 android:focusable="true"
-                android:contentDescription="@string/front_sprocket_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
             <TextView
                 android:id="@+id/rearSprocketTitle"
@@ -413,10 +414,10 @@
                 android:id="@+id/rearSprocketValue"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_gravity="left"
+                android:contentDescription="@string/rear_sprocket_desc"
                 android:focusable="true"
-                android:contentDescription="@string/rear_sprocket_desc"/>
+                android:inputType="number"
+                app:layout_gravity="left" />
 
 
         </android.support.v7.widget.GridLayout>
@@ -435,7 +436,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/sessions_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
+            android:layout_height="?actionBarSize"
+            android:background="@drawable/toolbar_banner">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -453,15 +455,17 @@
                         android:id="@+id/header_track_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
                         android:layout_marginEnd="4dp"
-                        android:textSize="20sp"
-                        android:focusable="true"/>
+                        android:layout_marginRight="4dp"
+                        android:focusable="true"
+                        android:textColor="@color/primary_light"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/on"
+                        android:textColor="@color/primary_light"
                         android:textSize="20sp" />
 
                     <TextView
@@ -470,8 +474,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:layout_marginStart="4dp"
-                        android:textSize="20sp"
-                        android:focusable="true"/>
+                        android:focusable="true"
+                        android:textColor="@color/primary_light"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -481,8 +486,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
+                    android:focusable="true"
                     android:gravity="center_vertical"
-                    android:focusable="true"/>
+                    android:textColor="@color/primary_light" />
 
             </LinearLayout>
 

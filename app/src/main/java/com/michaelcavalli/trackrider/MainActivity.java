@@ -1,19 +1,15 @@
 package com.michaelcavalli.trackrider;
 
-import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +18,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -41,8 +39,9 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.michaelcavalli.trackrider.data.DataContract;
 import com.michaelcavalli.trackrider.dialogs.AddTrackDayDialog;
-import com.michaelcavalli.trackrider.dialogs.AddTrackDialog;
 import com.michaelcavalli.trackrider.dialogs.DeleteDialog;
+import com.michaelcavalli.trackrider.dialogs.SelectionDialog;
+import com.michaelcavalli.trackrider.dialogs.TrackNameChangeDialog;
 import com.michaelcavalli.trackrider.util.LocationHelper;
 
 import java.sql.Date;
@@ -55,12 +54,12 @@ import java.text.SimpleDateFormat;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         DeleteDialog.DeleteCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, SelectionDialog.SelectCallback, TrackNameChangeDialog.NameChangeReturnInterface {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private TrackDayAdapter trackDayAdapter;    // Adapter to fill the recyclerview with track days
     private RecyclerView listOfTrackDays;       // Recyclerview that holds the track days
-    private int trackDayIdToDelete = 0;         // Used to determine which trackday to delete
+    private int trackDayIdSelected = 0;         // Used to determine which trackday to delete
     private Location mLastLocation;             // Last location the app received
 
     private GoogleApiClient mGoogleApiClient;   // GoogleApiClient used for location info
@@ -77,13 +76,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String[] TRACK_DAY_COLUMNS = {
             DataContract.TrackDays.TABLE_NAME + "." + DataContract.TrackDays._ID,
             DataContract.TrackDays.COLUMN_TRACK_NAME,
-            DataContract.TrackDays.COLUMN_TRACK_DAY_DATE
+            DataContract.TrackDays.COLUMN_TRACK_DAY_DATE,
+            DataContract.TrackDays.COLUMN_TRACK_DAY_NAME
     };
 
     // Column numbers for data provider
-    static final int COL_TRACK_ENTRY_ID = 0;
+    static final int COL_TRACK_DAY_ENTRY_ID = 0;
     static final int COL_TRACK_NAME = 1;
     static final int COL_TRACK_DAY_DATE = 2;
+    static final int COL_TRACK_DAY_NAME = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public boolean onClick(TrackDayAdapter.TrackDayViewHolder vh, boolean longClick) {
 
                 if (longClick) {
-                    trackDayIdToDelete = vh.id;
-                    if (trackDayIdToDelete != 0) {
-                        DialogFragment newDialog = new DeleteDialog();
+                    trackDayIdSelected = vh.id;
+                    if (trackDayIdSelected != 0) {
+                        DialogFragment newDialog = new SelectionDialog();
                         newDialog.show(getSupportFragmentManager(), getString(R.string.delete_dialog));
                         return true;
                     } else
@@ -322,11 +323,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     @Override
     public void delete() {
-        if (trackDayIdToDelete != 0) {
+        if (trackDayIdSelected != 0) {
 
             // Selection and args to identify sessions to delete
             String selection = DataContract.SessionsEntry.COLUMN_TRACK_DAY_KEY + " = ? ";
-            String[] selectionArgs = new String[]{Integer.toString(trackDayIdToDelete)};
+            String[] selectionArgs = new String[]{Integer.toString(trackDayIdSelected)};
 
             // Delete all associated sessions first
             getContentResolver().delete(DataContract.SessionsEntry.CONTENT_URI, selection, selectionArgs);
@@ -339,8 +340,54 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             // Notify the adapter that the data has changed
             trackDayAdapter.notifyDataSetChanged();
-            trackDayIdToDelete = 0;
+            trackDayIdSelected = 0;
         }
+    }
+
+
+    /**
+     *  If the user selects the name change option, then this method is called to open a dialog
+     *  the user can enter a new track day name into.
+     */
+    @Override
+    public void changeName() {
+        if (trackDayIdSelected != 0) {
+            DialogFragment changeTrackDayNameDialog = new TrackNameChangeDialog();
+            changeTrackDayNameDialog.show(getSupportFragmentManager(), getString(R.string.change_trackday_name_dialog));
+        }
+    }
+
+    /**
+     * If the user enters a new track day name and clicks OK, this method is called to record the
+     * new name into the database.
+     * @param dialog
+     */
+    @Override
+    public void changeTrackDayName(DialogFragment dialog) {
+
+        String newName;
+
+        // The EditText holding the new name
+        EditText textBox = (EditText) dialog.getDialog().findViewById(R.id.trackday_name_entry);
+
+        // The ContentValues we'll use to enter the new name into the database.
+        ContentValues cv = new ContentValues();
+
+        // Get the new name from the EditText
+        newName = textBox.getText().toString();
+
+        // Put the new value in the ContentValues
+        cv.put(DataContract.TrackDays.COLUMN_TRACK_DAY_NAME, newName);
+
+        // Add new track day name value to the database
+        String selection = DataContract.TrackDays.TABLE_NAME + "." + DataContract.TrackDays._ID + " = ?";
+        String selectionArgs[] = new String[]{Integer.toString(trackDayIdSelected)};
+        Uri updateUri = DataContract.TrackDays.CONTENT_URI;
+
+        getContentResolver().update(updateUri, cv, selection, selectionArgs);
+
+        // Change selected track day back to 0
+        trackDayIdSelected = 0;
     }
 
     /**

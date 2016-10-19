@@ -62,6 +62,9 @@ public class DataContract {
         // Table name
         public static final String TABLE_NAME = "track_days";
 
+        // Trackday name
+        public static final String COLUMN_TRACK_DAY_NAME = "trackday_name";
+
         // Track name
         public static final String COLUMN_TRACK_NAME = "track_name";
 

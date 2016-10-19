@@ -22,6 +22,7 @@ public class TrackDayAdapter extends RecyclerView.Adapter<TrackDayAdapter.TrackD
      * This is the viewholder for the track day adapter
      */
     public class TrackDayViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener{
+        public final TextView trackDayName; // The header textview for the track day name
         public final TextView trackName;    // The header textview for the track name
         public final TextView date;         // The header  textview for the date
         public int id;                      // The id of the track day
@@ -29,6 +30,7 @@ public class TrackDayAdapter extends RecyclerView.Adapter<TrackDayAdapter.TrackD
         public TrackDayViewHolder(View view){
             super(view);
             // Get the textview references in the list item
+            trackDayName = (TextView) view.findViewById(R.id.trackday_name);
             trackName = (TextView) view.findViewById(R.id.track_name);
             date = (TextView) view.findViewById(R.id.trackday_date);
             // Set the onclick listeners for the list item
@@ -82,7 +84,7 @@ public class TrackDayAdapter extends RecyclerView.Adapter<TrackDayAdapter.TrackD
     public TrackDayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(parent instanceof RecyclerView){
             // The view to use as a list item, inflated in the parent
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trackday_list_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trackday_list_item_cardview, parent, false);
             return new TrackDayViewHolder(view);
         } else {
             throw new RuntimeException("Not bound to RecyclerView");
@@ -101,12 +103,14 @@ public class TrackDayAdapter extends RecyclerView.Adapter<TrackDayAdapter.TrackD
         trackDaysCursor.moveToPosition(position);
 
         // Get all the info needed
-        int id = trackDaysCursor.getInt(MainActivity.COL_TRACK_ENTRY_ID);
+        int id = trackDaysCursor.getInt(MainActivity.COL_TRACK_DAY_ENTRY_ID);
+        String trackDayName = trackDaysCursor.getString(MainActivity.COL_TRACK_DAY_NAME);
         String trackName = trackDaysCursor.getString(MainActivity.COL_TRACK_NAME);
         String date = trackDaysCursor.getString(MainActivity.COL_TRACK_DAY_DATE);
 
         // Set the values into the layout using the holder
         holder.id=id;
+        holder.trackDayName.setText(trackDayName);
         holder.trackName.setText(trackName);
         holder.trackName.setContentDescription("Track for this track day is " + trackName);
         holder.date.setText(date);

@@ -1,20 +1,16 @@
 package com.michaelcavalli.trackrider;
 
-import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +28,6 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
@@ -42,8 +37,6 @@ import com.michaelcavalli.trackrider.data.DataContract;
 import com.michaelcavalli.trackrider.dialogs.AddTrackDialog;
 import com.michaelcavalli.trackrider.dialogs.DeleteDialog;
 import com.michaelcavalli.trackrider.util.LocationHelper;
-
-import java.util.Date;
 
 
 /**

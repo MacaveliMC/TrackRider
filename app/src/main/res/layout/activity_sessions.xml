@@ -28,7 +28,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/sessions_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
+            android:layout_height="?actionBarSize"
+            android:background="@drawable/toolbar_banner">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,15 +41,17 @@
                     android:id="@+id/sessions_track_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
                     android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:focusable="true"
+                    android:textColor="@color/primary_light"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/on"
+                    android:textColor="@color/primary_light"
                     android:textSize="20sp" />
 
                 <TextView
@@ -58,6 +61,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
                     android:focusable="true"
+                    android:textColor="@color/primary_light"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -72,24 +76,23 @@
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
+        android:contentDescription="@string/add_track_day_button_desc"
         android:focusable="true"
         android:onClick="addSession"
         android:src="@drawable/add_button"
         app:elevation="@dimen/fab_elevation"
         app:fabSize="normal"
-        android:contentDescription="@string/add_track_day_button_desc"
         app:pressedTranslationZ="@dimen/fab_press_translation_z" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
-        android:layout_gravity="bottom|center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|center_horizontal"
         app:adSize="BANNER"
-        app:adUnitId="@string/banner_ad_unit_id">
-    </com.google.android.gms.ads.AdView>
+        app:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
 
 
 </android.support.design.widget.CoordinatorLayout>

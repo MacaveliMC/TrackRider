@@ -9,7 +9,9 @@
     <string name="delete_message">"Delete?"</string>
     <string name="delete_dialog">"Delete Dialog"</string>
     <string name="add_track_dialog">"Add Track Dialog"</string>
-    <string name="add_track_title">"Enter Track Name:"</string>
+    <string name="change_trackday_name_dialog">"Change Track Day Name"</string>
+    <string name="enter_track_name_title">"Enter Track Name:"</string>
+    <string name="user_enter_info">"Enter New Name:"</string>
     <string name="add_lap_time_dialog">Add Lap Time Dialog</string>
     <string name="pick_track">"Choose Track"</string>
 
@@ -88,5 +90,7 @@
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <string name="track_list_empty">"No Tracks In List"</string>
+
+    <string name="temp_track_day_name">"Track Day Name"</string>
 
 </resources>

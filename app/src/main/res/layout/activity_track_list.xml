@@ -28,6 +28,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/tracklist_toolbar"
             android:layout_width="match_parent"
+            android:background="@drawable/toolbar_banner"
             android:layout_height="?actionBarSize">
 
             <RelativeLayout
@@ -38,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/track_list_title"
-                    android:textColor="@color/primary_text"
+                    android:textColor="@color/primary_light"
                     android:textSize="30sp"
                     android:typeface="normal"
                     android:gravity="center_vertical|center_horizontal" />
