@@ -33,7 +33,10 @@
                 android:focusable="true"
                 android:text="@string/lap_times_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical" />
+                app:layout_gravity="center_vertical"
+                android:textSize="24sp"
+                android:textColor="@color/primary_text"
+                android:textStyle="normal|bold" />
 
             <Button
                 android:id="@+id/add_lap_time_button"
@@ -68,7 +71,11 @@
                 android:focusable="true"
                 android:text="@string/suspension_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical" />
+                app:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif"
+                android:textSize="24sp"
+                android:textStyle="normal|bold"
+                android:textColor="@color/primary_text" />
 
             <TextView
                 android:id="@+id/frontCompressionTitle"
@@ -290,7 +297,10 @@
                 android:focusable="true"
                 android:text="@string/tires_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical" />
+                app:layout_gravity="center_vertical"
+                android:textSize="24sp"
+                android:textColor="@color/primary_text"
+                android:textStyle="normal|bold" />
 
             <TextView
                 android:id="@+id/frontTirePressureOutTitle"
@@ -379,7 +389,10 @@
                 android:focusable="true"
                 android:text="@string/gearing_section_title"
                 app:layout_columnSpan="2"
-                app:layout_gravity="center_vertical" />
+                app:layout_gravity="center_vertical"
+                android:textSize="24sp"
+                android:textStyle="normal|bold"
+                android:textColor="@color/primary_text" />
 
             <TextView
                 android:id="@+id/frontSprocketTitle"

@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private int LOCATION_SETTINGS_RESOLUTION = 4259;// Code to identify the location resolution request
 
     // Strings for sending data to Sessions activity
-    public static final String TRACK_NAME_DATA = "com.michaelcavalli.trackrider.TRACK_NAME_DATA";
+    public static final String TRACK_DAY_NAME_DATA = "com.michaelcavalli.trackrider.TRACK_DAY_NAME_DATA";
     public static final String DATE_DATA = "com.michaelcavalli.trackrider.DATE_DATA";
 
     // Projection for data provider
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     } else
                         return false; // not successful
                 } else {
-                    openSessionList(vh.id, vh.trackName.getText().toString(), vh.date.getText().toString());
+                    openSessionList(vh.id, vh.trackDayName.getText().toString(), vh.date.getText().toString());
                     return true;
                 }
             }
@@ -394,14 +394,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * This method opens the session list based on which track day was clicked
      *
      * @param id        The ID of the track day to pull sessions for
-     * @param trackName The track name for the track day
+     * @param trackDayName The track name for the track day
      * @param date      The date of the track day
      */
-    public void openSessionList(int id, String trackName, String date) {
+    public void openSessionList(int id, String trackDayName, String date) {
         Uri uri = DataContract.SessionsEntry.buildSessionsWithTrackDayId(id);
         Intent intent = new Intent(this, SessionsActivity.class);
         intent.setData(uri);
-        intent.putExtra(TRACK_NAME_DATA, trackName);
+        intent.putExtra(TRACK_DAY_NAME_DATA, trackDayName);
         intent.putExtra(DATE_DATA, date);
         startActivity(intent);
     }

@@ -71,7 +71,7 @@ public class SessionsActivity extends AppCompatActivity implements LoaderManager
 
         // Get the data sent from the main activity for the track day selected
         sessionListUri = getIntent().getData();
-        sentTrackName = getIntent().getStringExtra(MainActivity.TRACK_NAME_DATA);
+        sentTrackName = getIntent().getStringExtra(MainActivity.TRACK_DAY_NAME_DATA);
         sentDate = getIntent().getStringExtra(MainActivity.DATE_DATA);
 
         // Get the recyclerview and
@@ -80,7 +80,7 @@ public class SessionsActivity extends AppCompatActivity implements LoaderManager
         sessionListRecyclerView.hasFixedSize();
 
         // Get the header textviews
-        headerTrackName = (TextView) findViewById(R.id.sessions_track_name);
+        headerTrackName = (TextView) findViewById(R.id.sessions_track_day_name);
         headerDate = (TextView) findViewById(R.id.sessions_date);
 
         // Set the header textviews
